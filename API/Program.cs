@@ -11,19 +11,20 @@
 
 using System.Text;
 using AspNetCoreRateLimit;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using Serilog.Events;
-using HealthChecks.UI.Client;
-using RestaurantApi.Shared.Data;
+using Microsoft.OpenApi;
+using RestaurantApi.AppointmentBooking.Services;
 using RestaurantApi.Auth.Services;
 using RestaurantApi.Menu.Services;
-using RestaurantApi.AppointmentBooking.Services;
-using Microsoft.OpenApi;
+using RestaurantApi.Shared.Data;
 using RestaurantApi.Shared.Middleware;
+using Serilog;
+using Serilog.Events;
+
 
 
 // ═══════════════════════════════════════════════════════════════════

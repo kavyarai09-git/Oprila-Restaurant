@@ -71,6 +71,28 @@ public class AdminAppointmentsController(IAppointmentService svc) : ControllerBa
         return Ok(ApiResponse<DashboardStatsResponse>.Ok(data));
     }
 
+    [HttpGet("recent-activities")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetRecentActivities()
+    {
+        var result = await _svc.GetRecentActivityAsync();
+
+        return Ok(new
+        {
+            success = true,
+            message = "Success",
+            data = result
+        });
+    }
+
+    [HttpGet("conversation-transcript")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetConversationTranscript()
+    {
+        var result = await _svc.GetConversationTranscriptAsync();
+        return Ok(result);
+    }
+
     /// <summary>Get a single appointment with full detail. [Admin | Staff]</summary>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(ApiResponse<AppointmentResponse>), 200)]

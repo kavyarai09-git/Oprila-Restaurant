@@ -60,13 +60,15 @@ public class AppointmentService(AppDbContext db) : IAppointmentService
         }
 
         var total = await q.CountAsync();
-        var items = await q
-            .OrderByDescending(a => a.AppointmentDate)
-            .ThenBy(a => a.StartTime)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
 
+  var allItems = await q.ToListAsync();
+
+  var items = allItems
+      .OrderByDescending(a => a.AppointmentDate)
+      .ThenBy(a => a.StartTime)
+      .Skip((page - 1) * pageSize)
+      .Take(pageSize)
+      .ToList();
         return new PagedResponse<AppointmentResponse>
         {
             Items = items.Select(Map).ToList(),
@@ -265,6 +267,72 @@ public class AppointmentService(AppDbContext db) : IAppointmentService
         entity.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<List<RecentActivityResponses>> GetRecentActivityAsync()
+    {
+        return await Task.FromResult(new List<RecentActivityResponses>
+    {
+        new()
+        {
+            Id = 1,
+            CallerPhone = "+91 9876543210",
+            Status = "Completed",
+            StartedAt = DateTime.UtcNow.AddMinutes(-30),
+            EndedAt = DateTime.UtcNow.AddMinutes(-25)
+        },
+        new()
+        {
+            Id = 2,
+            CallerPhone = "+91 9876501234",
+            Status = "Pending",
+            StartedAt = DateTime.UtcNow.AddMinutes(-20),
+            EndedAt = null
+        },
+        new()
+        {
+            Id = 3,
+            CallerPhone = "+91 9123456789",
+            Status = "Failed",
+            StartedAt = DateTime.UtcNow.AddMinutes(-10),
+            EndedAt = DateTime.UtcNow.AddMinutes(-9)
+        }
+    });
+    }
+
+    public async Task<List<ConversationTranscript>> GetConversationTranscriptAsync()
+    {
+        return await Task.FromResult(new List<ConversationTranscript>
+    {
+        new()
+        {
+            Id = 1,
+            Speaker = "AI Assistant",
+            Message = "Good afternoon. Thank you for calling Maître D' Pro Bistro. How may I assist you with your reservation today?",
+            CreatedAt = DateTime.UtcNow.AddMinutes(-10)
+        },
+        new()
+        {
+            Id = 2,
+            Speaker = "Customer",
+            Message = "Hi, I'd like to book a table for four people tonight around 8 PM.",
+            CreatedAt = DateTime.UtcNow.AddMinutes(-9)
+        },
+        new()
+        {
+            Id = 3,
+            Speaker = "AI Assistant",
+            Message = "Certainly. May I have your name, please?",
+            CreatedAt = DateTime.UtcNow.AddMinutes(-8)
+        },
+        new()
+        {
+            Id = 4,
+            Speaker = "Customer",
+            Message = "My name is Rahul.",
+            CreatedAt = DateTime.UtcNow.AddMinutes(-7)
+        }
+    });
     }
 
     // ═══════════════════════════════════════════════════════════════
