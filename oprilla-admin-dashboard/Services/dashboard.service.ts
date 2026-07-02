@@ -7,100 +7,95 @@ export interface Appointment {
   specialRequests?: string;
 }
 
+export interface RecentActivity {
+  id: number;
+  callerPhone: string;
+  status: string;
+  startedAt: string;
+  endedAt?: string;
+}
+
+
+
+export interface ConversationTranscript {
+  id: number;
+  callHistoryId: number;
+  speaker: string;
+  message: string;
+  createdAt: string;
+}
+
+
+
 const API_URL = "http://localhost:5232/api";
 
-export const getAppointments = async (): Promise<Appointment[]> => {
+const TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AcmVzdGF1cmFudC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImp0aSI6ImZjYjUxODk0LTUwZGUtNGQ4Ni1hMzNmLWI5YzExNDkzZDZhNiIsIm5iZiI6MTc4Mjk4NDQyNiwiZXhwIjoxNzgzMDEzMjI2LCJpc3MiOiJSZXN0YXVyYW50QVBJIiwiYXVkIjoiUmVzdGF1cmFudEFQSUNsaWVudHMifQ.ugWuipwis2ZCsK7SUky4VpLRWJUu9u2njAstGJiwiDw";
+
+export async function getAppointments(): Promise<Appointment[]> {
   try {
-    const token = localStorage.getItem("token");
-
-    console.log("🔑 Token:", token);
-
-    if (!token) {
-      console.error("❌ No token found in localStorage");
-      return [];
-    }
-
     const response = await fetch(
-      `${API_URL}/admin/appointments?page=1&pageSize=20`,
+      `${API_URL}/admin/appointments`,
       {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${TOKEN}`,
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       }
     );
 
-    console.log("Status:", response.status);
-
-    if (response.status === 401) {
-      console.error("❌ Unauthorized (401)");
-
-      const errorText = await response.text();
-      console.log("Backend Response:", errorText);
-
-      return [];
-    }
-
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error("Failed to fetch appointments");
     }
 
     const result = await response.json();
 
-    console.log("Appointments API Response:", result);
+    console.log("Appointments:", result);
 
-    return result.data ?? [];
+    return result.data.items ?? result.data ?? [];
   } catch (error) {
-    console.error("❌ Fetch appointments failed:", error);
+    console.error("Appointments Error:", error);
     return [];
   }
-};
+}
 
-export const getRecentActivities = async () => {
+export async function getRecentActivities(): Promise<RecentActivity[]> {
   try {
-    const token = localStorage.getItem("token");
-
-    console.log("🔑 Token:", token);
-
-    if (!token) {
-      console.error("❌ No token found in localStorage");
-      return [];
-    }
-
     const response = await fetch(
-      `${API_URL}/admin/recent-activities`,
+      `${API_URL}/admin/appointments/recent-activities`,
       {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${TOKEN}`,
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       }
     );
 
-    console.log("Status:", response.status);
-
-    if (response.status === 401) {
-      console.error("❌ Unauthorized (401)");
-
-      const errorText = await response.text();
-      console.log("Backend Response:", errorText);
-
-      return [];
-    }
-
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error(`HTTP Error: ${response.status}`);
     }
 
     const result = await response.json();
 
-    console.log("Recent Activities Response:", result);
+    console.log("Recent Activities:", result);
 
     return result.data ?? [];
   } catch (error) {
-    console.error("❌ Fetch recent activities failed:", error);
+    console.error("Recent Activities Error:", error);
     return [];
   }
+}
+
+export const getConversationTranscript = async () => {
+  const response = await fetch(
+   `${API_URL}/admin/appointments/conversation-transcript`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch conversation transcript");
+  }
+
+  return response.json();
 };
