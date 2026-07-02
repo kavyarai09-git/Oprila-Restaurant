@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Settings, CircleHelp, X } from "lucide-react";
 import NavItem from "@/app/dashboard/components/NavItem";
 import {
@@ -17,6 +18,17 @@ export default function Sidebar({
   isOpen,
   onClose,
 }: SidebarProps) {
+  useEffect(() => {
+    // Prevent background scrolling on mobile and tablet
+    if (window.innerWidth < 1280) {
+      document.body.style.overflow = isOpen ? "hidden" : "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   return (
     <>
       {/* Overlay */}
