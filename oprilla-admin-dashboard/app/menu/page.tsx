@@ -6,7 +6,6 @@ import Sidebar from "../../components/Sidebar";
 import TopBar from "../components/TopBar";
 import MenuHeader from "../components/MenuHeader";
 import CategorySection from "../components/CategorySection";
-import MainsSection from "../components/MainSection";
 
 import { useMenu } from "./hooks/useMenu";
 
@@ -18,14 +17,6 @@ export default function MenuPage() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  const starters = categories.find(
-    (category) => category.name === "Starters"
-  );
-
-  const mains = categories.find(
-    (category) => category.name === "Mains"
-  );
 
   return (
     <div className="min-h-screen bg-[#F7F6F3] xl:flex">
@@ -44,13 +35,12 @@ export default function MenuPage() {
         <div className="p-4 md:p-6">
           <MenuHeader />
 
-          {starters && (
-            <CategorySection items={starters.items} />
-          )}
-
-          {mains && (
-            <MainsSection items={mains.items} />
-          )}
+          {categories.map((category) => (
+            <CategorySection
+              key={category.id}
+              items={category.items}
+            />
+          ))}
         </div>
       </main>
     </div>
