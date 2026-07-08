@@ -36,11 +36,12 @@ export default function MenuPage() {
           <MenuHeader />
 
           {categories.map((category) => (
-            <CategorySection
-              key={category.id}
-              items={category.items}
-            />
-          ))}
+  <CategorySection
+    key={category.id}
+    name={category.name}
+    items={category.items}
+  />
+))}
         </div>
       </main>
     </div>

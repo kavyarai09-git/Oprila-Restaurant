@@ -3,10 +3,12 @@ import AddMenuCard from "./AddMenuCard";
 import { MenuItem } from "../menu/service/menuservice";
 
 interface CategorySectionProps {
+  name: string;
   items: MenuItem[];
 }
 
 export default function CategorySection({
+  name,
   items,
 }: CategorySectionProps) {
   return (
@@ -15,7 +17,7 @@ export default function CategorySection({
       <div className="flex items-center justify-between border-b border-gray-200 pb-3 mb-6">
         <div className="flex items-center gap-2">
           <h2 className="text-[28px] font-bold text-[#1F1F1F]">
-            Starters
+            {name}
           </h2>
 
           <span className="text-sm text-gray-500">
