@@ -18,6 +18,7 @@ export interface MenuCategory {
   displayOrder: number;
   isActive: boolean;
   items: MenuItem[];
+  actionText: string;
 }
 
 export async function getMenu(): Promise<MenuCategory[]> {

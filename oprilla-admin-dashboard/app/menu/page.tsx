@@ -37,10 +37,11 @@ export default function MenuPage() {
 
           {categories.map((category) => (
   <CategorySection
-    key={category.id}
-    name={category.name}
-    items={category.items}
-  />
+  key={category.id}
+  categoryName={category.name}
+  items={category.items}
+  actionText={category.actionText}
+/>
 ))}
         </div>
       </main>
