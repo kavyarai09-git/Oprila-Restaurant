@@ -1,31 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Sidebar from "../../components/Sidebar";
-import TopBar from "../components/Temp";
+import TopBar from "../components/TopBar";
 import MenuHeader from "../components/MenuHeader";
 import CategorySection from "../components/CategorySection";
 import MainsSection from "../components/MainSection";
 
-import { getMenu, MenuCategory } from "../menu/service/menuservice";
+import { useMenu } from "./hooks/useMenu";
 
 export default function MenuPage() {
-  const [categories, setCategories] = useState<MenuCategory[]>([]);
+  const { categories, loading } = useMenu();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    async function fetchMenu() {
-      try {
-        const data = await getMenu();
-        setCategories(data);
-      } catch (error) {
-        console.error("Failed to fetch menu:", error);
-      }
-    }
-
-    fetchMenu();
-  }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const starters = categories.find(
     (category) => category.name === "Starters"
